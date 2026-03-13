@@ -1,0 +1,66 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        omnitrix: {
+          green:   '#39FF14',
+          dim:     '#1a7a00',
+          dark:    '#0a0f0a',
+          panel:   '#0d1a0d',
+          black:   '#050805',
+          gray:    '#2a3a2a',
+          glow:    'rgba(57,255,20,0.15)',
+        },
+        alien: {
+          heatblast:  '#FF4500',
+          fourarms:   '#CC2200',
+          upgrade:    '#00BFFF',
+          ghostfreak: '#7B68EE',
+          wildmutt:   '#8B4513',
+          diamondhead:'#00E5FF',
+          ripjaws:    '#006994',
+          stinkfly:   '#9ACD32',
+          xlr8:       '#1E90FF',
+          greymatter: '#B0C4DE',
+          cannonbolt: '#FFA500',
+          wildvine:   '#228B22',
+          blitzwolfer:'#4169E1',
+          snare:      '#8B008B',
+          waybig:     '#DC143C',
+          upchuck:    '#6B8E23',
+        },
+      },
+      fontFamily: {
+        display: ['"Orbitron"', 'monospace'],
+        body:    ['"Exo 2"', 'sans-serif'],
+        mono:    ['"Share Tech Mono"', 'monospace'],
+      },
+      animation: {
+        'omnitrix-spin':  'omnitrixSpin 4s linear infinite',
+        'omnitrix-pulse': 'omnitrixPulse 2s ease-in-out infinite',
+        'dna-scroll':     'dnaScroll 8s linear infinite',
+        'alien-float':    'alienFloat 4s ease-in-out infinite',
+        'scan':           'scan 3s linear infinite',
+        'glitch':         'glitch 4s steps(1) infinite',
+      },
+      keyframes: {
+        omnitrixSpin:  { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+        omnitrixPulse: { '0%,100%': { boxShadow: '0 0 0 0 rgba(57,255,20,0.5)' }, '50%': { boxShadow: '0 0 0 20px rgba(57,255,20,0)' } },
+        dnaScroll:     { '0%': { transform: 'translateY(0)' }, '100%': { transform: 'translateY(-50%)' } },
+        alienFloat:    { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-16px)' } },
+        scan:          { '0%': { top: '-10%' }, '100%': { top: '110%' } },
+        glitch: {
+          '0%,95%':  { clipPath: 'none', transform: 'none' },
+          '96%':     { clipPath: 'inset(10% 0 80% 0)', transform: 'translate(-4px,0)' },
+          '97%':     { clipPath: 'inset(60% 0 20% 0)', transform: 'translate(4px,0)' },
+          '98%':     { clipPath: 'inset(30% 0 50% 0)', transform: 'translate(-2px,0)' },
+          '100%':    { clipPath: 'none', transform: 'none' },
+        },
+      },
+    },
+  },
+  plugins: [],
+}

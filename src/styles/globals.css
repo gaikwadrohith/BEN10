@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Ben 10 Design Tokens ── */
+:root {
+  --green:      #39FF14;
+  --green-dim:  #1a7a00;
+  --green-glow: rgba(57,255,20,0.15);
+  --bg:         #050805;
+  --bg2:        #0a0f0a;
+  --bg3:        #0d1a0d;
+  --text:       #e8f5e8;
+  --text-muted: #5a7a5a;
+  --border:     rgba(57,255,20,0.12);
+  --border-dim: rgba(57,255,20,0.06);
+  --surface:    rgba(57,255,20,0.04);
+  --ease-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.light-mode {
+  --bg:         #f0f5f0;
+  --bg2:        #e5ede5;
+  --bg3:        #dceadc;
+  --text:       #0a0f0a;
+  --text-muted: #3a5a3a;
+  --border:     rgba(57,255,20,0.3);
+  --surface:    rgba(57,255,20,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+  transition: background 0.4s, color 0.4s;
+}
+
+::selection { background: var(--green); color: #000; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--green); border-radius: 0; }
+
+/* ── Omnitrix Cursor ── */
+.cursor-dot {
+  position: fixed; pointer-events: none; z-index: 99999;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green), 0 0 20px rgba(57,255,20,0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+  will-change: left, top;
+}
+.cursor-ring {
+  position: fixed; pointer-events: none; z-index: 99998;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1.5px solid rgba(57,255,20,0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-expo), height 0.3s var(--ease-expo);
+  will-change: left, top;
+}
+.cursor-dot.hovering  { width: 18px; height: 18px; box-shadow: 0 0 20px var(--green), 0 0 40px rgba(57,255,20,0.4); }
+.cursor-ring.hovering { width: 60px; height: 60px; border-color: var(--green); }
+
+/* ── Scroll progress ── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 9999;
+  background: linear-gradient(90deg, var(--green-dim), var(--green));
+  transform-origin: left; transform: scaleX(0);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ── Glass / Panels ── */
+.glass {
+  background: rgba(57,255,20,0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+.panel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(57,255,20,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ── Omnitrix symbol ── */
+.omnitrix-symbol {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.omnitrix-symbol svg { filter: drop-shadow(0 0 12px var(--green)); }
+
+/* ── Scan line ── */
+.scanlines::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(57,255,20,0.02) 3px, rgba(57,255,20,0.02) 4px
+  );
+}
+
+/* ── Hex grid bg ── */
+.hex-bg {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(57,255,20,0.08) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+/* ── Section label ── */
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--green); margin-bottom: 16px;
+}
+.section-label::before { content: ''; width: 20px; height: 1px; background: var(--green); }
+
+/* ── Alien category badge ── */
+.alien-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 3px 10px; border: 1px solid currentColor; opacity: 0.9;
+}
+
+/* ── Glow effects ── */
+.glow-green  { box-shadow: 0 0 30px rgba(57,255,20,0.2), 0 0 80px rgba(57,255,20,0.08); }
+.text-glow   { text-shadow: 0 0 20px rgba(57,255,20,0.6), 0 0 40px rgba(57,255,20,0.3); }
+.border-glow { box-shadow: inset 0 0 20px rgba(57,255,20,0.05), 0 0 20px rgba(57,255,20,0.1); }
+
+/* ── Corner brackets ── */
+.bracketed {
+  position: relative;
+}
+.bracketed::before, .bracketed::after,
+.bracketed > .bracket-tl, .bracketed > .bracket-br {
+  content: '';
+  position: absolute;
+  width: 12px; height: 12px;
+  border-color: var(--green);
+  border-style: solid;
+  pointer-events: none;
+}
+.bracketed::before { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
+.bracketed::after  { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+
+/* ── DNA helix decoration ── */
+.dna-track { overflow: hidden; }
+
+/* ── Omnitrix dial ring ── */
+.omnitrix-ring {
+  border-radius: 50%;
+  border: 2px solid var(--green);
+  box-shadow: 0 0 20px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.1);
+}
+
+/* ── Progress bar ── */
+.alien-stat-bar {
+  height: 3px;
+  background: var(--border);
+  position: relative; overflow: hidden;
+}
+.alien-stat-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  transition: width 1s var(--ease-expo);
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 8999; opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
