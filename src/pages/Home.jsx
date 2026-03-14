@@ -4,7 +4,7 @@ import Features     from '@/components/sections/Features'
 import Gallery      from '@/components/sections/Gallery'
 import BenVersions  from '@/components/sections/BenVersions'
 import Testimonials from '@/components/sections/Testimonials'
-import Contact      from '@/components/sections/Contact'
+import Database     from '@/components/sections/Database'
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <Gallery />
       <BenVersions />
       <Testimonials />
-      <Contact />
+      <Database />
     </>
   )
 }

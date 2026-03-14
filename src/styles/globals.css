@@ -2,80 +2,298 @@
 @tailwind components;
 @tailwind utilities;
 
+*, *::before, *::after {
+  cursor: none !important;
+}
+
 /* ── Ben 10 Design Tokens ── */
 :root {
-  --green:      #39FF14;
-  --green-dim:  #1a7a00;
-  --green-glow: rgba(57,255,20,0.15);
-  --bg:         #050805;
-  --bg2:        #0a0f0a;
-  --bg3:        #0d1a0d;
-  --text:       #e8f5e8;
+  --green: #39ff14;
+  --green-dim: #1a7a00;
+  --green-glow: rgba(57, 255, 20, 0.15);
+  --bg: #050805;
+  --bg2: #0a0f0a;
+  --bg3: #0d1a0d;
+  --text: #e8f5e8;
   --text-muted: #5a7a5a;
-  --border:     rgba(57,255,20,0.12);
-  --border-dim: rgba(57,255,20,0.06);
-  --surface:    rgba(57,255,20,0.04);
-  --ease-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --border: rgba(57, 255, 20, 0.12);
+  --border-dim: rgba(57, 255, 20, 0.06);
+  --surface: rgba(57, 255, 20, 0.04);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --gallery-mid: #0a1f0a;
+  --theme-speed: 0.45s;
 }
 
 .light-mode {
-  --bg:         #f0f5f0;
-  --bg2:        #e5ede5;
-  --bg3:        #dceadc;
-  --text:       #0a0f0a;
+  --bg: #f0f5f0;
+  --bg2: #e5ede5;
+  --bg3: #dceadc;
+  --text: #0a0f0a;
   --text-muted: #3a5a3a;
-  --border:     rgba(57,255,20,0.3);
-  --surface:    rgba(57,255,20,0.06);
+  --border: rgba(57, 255, 20, 0.3);
+  --surface: rgba(57, 255, 20, 0.06);
+  --gallery-mid: #c8e6c8;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
+/* ── Global reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: auto;
+}
+
+/* ── Smooth theme transition ── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--theme-speed) ease,
+    border-color var(--theme-speed) ease,
+    color var(--theme-speed) ease,
+    box-shadow var(--theme-speed) ease,
+    fill var(--theme-speed) ease,
+    stroke var(--theme-speed) ease;
+}
+* {
+  transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+}
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Exo 2', sans-serif;
+  font-family: "Exo 2", sans-serif;
   overflow-x: hidden;
   cursor: none;
-  transition: background 0.4s, color 0.4s;
 }
 
-::selection { background: var(--green); color: #000; }
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-thumb { background: var(--green); border-radius: 0; }
-
-/* ── Omnitrix Cursor ── */
-.cursor-dot {
-  position: fixed; pointer-events: none; z-index: 99999;
-  width: 12px; height: 12px; border-radius: 50%;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99990;
   background: var(--green);
-  box-shadow: 0 0 10px var(--green), 0 0 20px rgba(57,255,20,0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s;
-  will-change: left, top;
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
-.cursor-ring {
-  position: fixed; pointer-events: none; z-index: 99998;
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 1.5px solid rgba(57,255,20,0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.3s var(--ease-expo), height 0.3s var(--ease-expo);
-  will-change: left, top;
+body.theme-flash::before {
+  opacity: 0.04;
 }
-.cursor-dot.hovering  { width: 18px; height: 18px; box-shadow: 0 0 20px var(--green), 0 0 40px rgba(57,255,20,0.4); }
-.cursor-ring.hovering { width: 60px; height: 60px; border-color: var(--green); }
 
-/* ── Scroll progress ── */
+::selection {
+  background: var(--green);
+  color: #000;
+}
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 0;
+}
+
+/* ══════════════════════════════════════════
+   OMNITRIX CURSOR
+══════════════════════════════════════════ */
+
+/* trail particles injected by JS */
+.cursor-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99990;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--green);
+  will-change: left, top, opacity, width, height;
+  transition: none !important;
+}
+
+/* ── dot = omnitrix core ── */
+.cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  transition: none !important;
+}
+
+/* outer black circle with green border */
+.cursor-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid var(--green);
+  box-shadow:
+    0 0 6px var(--green),
+    0 0 14px rgba(57, 255, 20, 0.45),
+    inset 0 0 6px rgba(57, 255, 20, 0.15);
+}
+
+/* hourglass X — the omnitrix symbol */
+.cursor-dot::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: var(--green);
+  clip-path: polygon(0% 0%, 38% 0%, 50% 38%, 62% 0%, 100% 0%, 100% 14%, 63% 50%, 100% 86%, 100% 100%, 62% 100%, 50% 62%, 38% 100%, 0% 100%, 0% 86%, 37% 50%, 0% 14%);
+  filter: drop-shadow(0 0 3px var(--green));
+}
+
+/* ── ring = outer dial ── */
+.cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  transition: none !important;
+
+  /* segmented border via conic-gradient */
+  background: conic-gradient(
+    rgba(57, 255, 20, 0.55) 0deg,
+    25deg,
+    transparent 25deg,
+    45deg,
+    rgba(57, 255, 20, 0.55) 45deg,
+    70deg,
+    transparent 70deg,
+    90deg,
+    rgba(57, 255, 20, 0.55) 90deg,
+    115deg,
+    transparent 115deg,
+    135deg,
+    rgba(57, 255, 20, 0.55) 135deg,
+    160deg,
+    transparent 160deg,
+    180deg,
+    rgba(57, 255, 20, 0.55) 180deg,
+    205deg,
+    transparent 205deg,
+    225deg,
+    rgba(57, 255, 20, 0.55) 225deg,
+    250deg,
+    transparent 250deg,
+    270deg,
+    rgba(57, 255, 20, 0.55) 270deg,
+    295deg,
+    transparent 295deg,
+    315deg,
+    rgba(57, 255, 20, 0.55) 315deg,
+    340deg,
+    transparent 340deg,
+    360deg
+  );
+  /* mask to make it ring-shaped */
+  -webkit-mask: radial-gradient(circle, transparent 42%, black 43%);
+  mask: radial-gradient(circle, transparent 42%, black 43%);
+}
+
+/* inner glow ring */
+.cursor-ring::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  box-shadow: inset 0 0 8px rgba(57, 255, 20, 0.08);
+}
+
+/* ── HOVER state ── */
+.cursor-dot.hovering {
+  width: 24px;
+  height: 24px;
+}
+.cursor-dot.hovering::before {
+  border-color: var(--green);
+  box-shadow:
+    0 0 12px var(--green),
+    0 0 28px rgba(57, 255, 20, 0.7),
+    0 0 50px rgba(57, 255, 20, 0.3),
+    inset 0 0 10px rgba(57, 255, 20, 0.2);
+}
+
+.cursor-ring.hovering {
+  width: 72px;
+  height: 72px;
+  background: conic-gradient(
+    rgba(57, 255, 20, 0.9) 0deg,
+    25deg,
+    transparent 25deg,
+    45deg,
+    rgba(57, 255, 20, 0.9) 45deg,
+    70deg,
+    transparent 70deg,
+    90deg,
+    rgba(57, 255, 20, 0.9) 90deg,
+    115deg,
+    transparent 115deg,
+    135deg,
+    rgba(57, 255, 20, 0.9) 135deg,
+    160deg,
+    transparent 160deg,
+    180deg,
+    rgba(57, 255, 20, 0.9) 180deg,
+    205deg,
+    transparent 205deg,
+    225deg,
+    rgba(57, 255, 20, 0.9) 225deg,
+    250deg,
+    transparent 250deg,
+    270deg,
+    rgba(57, 255, 20, 0.9) 270deg,
+    295deg,
+    transparent 295deg,
+    315deg,
+    rgba(57, 255, 20, 0.9) 315deg,
+    340deg,
+    transparent 340deg,
+    360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 42%, black 43%);
+  mask: radial-gradient(circle, transparent 42%, black 43%);
+  filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));
+}
+
+/* ── CLICK flash ── */
+.cursor-dot.clicking::before {
+  background: var(--green);
+  box-shadow:
+    0 0 20px var(--green),
+    0 0 50px rgba(57, 255, 20, 0.8);
+}
+
+/* ── Scroll progress bar ── */
 #scroll-progress {
-  position: fixed; top: 0; left: 0; height: 2px; z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
   background: linear-gradient(90deg, var(--green-dim), var(--green));
-  transform-origin: left; transform: scaleX(0);
+  transform-origin: left;
+  transform: scaleX(0);
   box-shadow: 0 0 8px var(--green);
+  transition: none !important;
 }
 
 /* ── Glass / Panels ── */
 .glass {
-  background: rgba(57,255,20,0.04);
+  background: rgba(57, 255, 20, 0.04);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
@@ -86,93 +304,133 @@ body {
   position: relative;
 }
 .panel::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(57,255,20,0.05) 0%, transparent 60%);
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(57, 255, 20, 0.05) 0%, transparent 60%);
   pointer-events: none;
 }
 
 /* ── Omnitrix symbol ── */
 .omnitrix-symbol {
   position: relative;
-  display: inline-flex; align-items: center; justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.omnitrix-symbol svg { filter: drop-shadow(0 0 12px var(--green)); }
+.omnitrix-symbol svg {
+  filter: drop-shadow(0 0 12px var(--green));
+}
 
-/* ── Scan line ── */
+/* ── Scan lines ── */
 .scanlines::after {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none; z-index: 5;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent, transparent 3px,
-    rgba(57,255,20,0.02) 3px, rgba(57,255,20,0.02) 4px
-  );
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(57, 255, 20, 0.02) 3px, rgba(57, 255, 20, 0.02) 4px);
 }
 
 /* ── Hex grid bg ── */
 .hex-bg {
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(57,255,20,0.08) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(57, 255, 20, 0.08) 1px, transparent 0);
   background-size: 32px 32px;
 }
 
 /* ── Section label ── */
 .section-label {
-  display: flex; align-items: center; gap: 12px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--green); margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
 }
-.section-label::before { content: ''; width: 20px; height: 1px; background: var(--green); }
+.section-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: var(--green);
+}
 
 /* ── Alien category badge ── */
 .alien-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-  padding: 3px 10px; border: 1px solid currentColor; opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1px solid currentColor;
+  opacity: 0.9;
 }
 
 /* ── Glow effects ── */
-.glow-green  { box-shadow: 0 0 30px rgba(57,255,20,0.2), 0 0 80px rgba(57,255,20,0.08); }
-.text-glow   { text-shadow: 0 0 20px rgba(57,255,20,0.6), 0 0 40px rgba(57,255,20,0.3); }
-.border-glow { box-shadow: inset 0 0 20px rgba(57,255,20,0.05), 0 0 20px rgba(57,255,20,0.1); }
+.glow-green {
+  box-shadow:
+    0 0 30px rgba(57, 255, 20, 0.2),
+    0 0 80px rgba(57, 255, 20, 0.08);
+}
+.text-glow {
+  text-shadow:
+    0 0 20px rgba(57, 255, 20, 0.6),
+    0 0 40px rgba(57, 255, 20, 0.3);
+}
+.border-glow {
+  box-shadow:
+    inset 0 0 20px rgba(57, 255, 20, 0.05),
+    0 0 20px rgba(57, 255, 20, 0.1);
+}
 
 /* ── Corner brackets ── */
 .bracketed {
   position: relative;
 }
-.bracketed::before, .bracketed::after,
-.bracketed > .bracket-tl, .bracketed > .bracket-br {
-  content: '';
+.bracketed::before,
+.bracketed::after {
+  content: "";
   position: absolute;
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   border-color: var(--green);
   border-style: solid;
   pointer-events: none;
 }
-.bracketed::before { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
-.bracketed::after  { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
-
-/* ── DNA helix decoration ── */
-.dna-track { overflow: hidden; }
+.bracketed::before {
+  top: 0;
+  left: 0;
+  border-width: 1.5px 0 0 1.5px;
+}
+.bracketed::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1.5px 1.5px 0;
+}
 
 /* ── Omnitrix dial ring ── */
 .omnitrix-ring {
   border-radius: 50%;
   border: 2px solid var(--green);
-  box-shadow: 0 0 20px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.1);
+  box-shadow:
+    0 0 20px rgba(57, 255, 20, 0.3),
+    inset 0 0 20px rgba(57, 255, 20, 0.1);
 }
 
-/* ── Progress bar ── */
+/* ── Alien stat bar ── */
 .alien-stat-bar {
   height: 3px;
   background: var(--border);
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 .alien-stat-bar::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -182,9 +440,14 @@ body {
   transition: width 1s var(--ease-expo);
 }
 
-/* Grain overlay */
+/* ── Grain overlay ── */
 body::after {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 8999; opacity: 0.15;
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8999;
+  opacity: 0.15;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  transition: none;
 }
