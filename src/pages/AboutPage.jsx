@@ -16,12 +16,12 @@ const SKILLS = [
 ];
 
 const TIMELINE = [
-  { year: "2019", title: "Started Coding", desc: "Fell in love with frontend development and never looked back." },
-  { year: "2020", title: "First Project", desc: "Built my first full-stack app and deployed it to production." },
-  { year: "2021", title: "React Mastery", desc: "Went deep on React, GSAP animations and interactive UI." },
-  { year: "2022", title: "Design Systems", desc: "Started building design systems and component libraries." },
-  { year: "2023", title: "Open Source", desc: "Contributing to open source and building in public." },
-  { year: "2024", title: "Going Further", desc: "Exploring 3D web, WebGL and advanced animation techniques." },
+  { year: "2022", title: "Started Coding", desc: "Fell in love with frontend development and never looked back." },
+  { year: "2023", title: "First Project", desc: "Built my first full-stack app and deployed it to production." },
+  { year: "2023", title: "React Mastery", desc: "Went deep on React, GSAP animations and interactive UI." },
+  { year: "2024", title: "Design Systems", desc: "Started building design systems and component libraries." },
+  { year: "2025", title: "Open Source", desc: "Contributing to open source and building in public." },
+  { year: "2026", title: "Going Further", desc: "Exploring 3D web, WebGL and advanced animation techniques." },
 ];
 
 const STATS = [
@@ -373,7 +373,7 @@ export default function AboutPage() {
             </MagneticButton>
 
             <MagneticButton
-              href="https://github.com/"
+              href="https://github.com/gaikwadrohith"
               target="_blank"
               rel="noreferrer"
               style={{

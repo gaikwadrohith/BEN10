@@ -7,58 +7,61 @@ import { useDarkMode } from "@/hooks/useDarkMode";
 import { cn } from "@/utils/helpers";
 
 const LINKS = [
-  { label: "Aliens",   href: "#aliens"   },
-  { label: "Series",   href: "#series"   },
-  { label: "Gallery",  href: "#gallery"  },
+  { label: "Aliens", href: "#aliens" },
+  { label: "Series", href: "#series" },
+  { label: "Gallery", href: "#gallery" },
   { label: "Villains", href: "#villains" },
   { label: "Database", href: "#database" },
 ];
+
+// function OmnitrixIcon({ size = 28 }) {
+//   return (
+//     <svg width={size} height={size} viewBox="0 0 100 100">
+//       <circle cx="50" cy="50" r="48" fill="none" stroke="#39FF14" strokeWidth="2" />
+//       <ellipse cx="50" cy="50" rx="22" ry="30" fill="none" stroke="#39FF14" strokeWidth="1.5" />
+//       <ellipse cx="50" cy="50" rx="30" ry="22" fill="none" stroke="#39FF14" strokeWidth="1.5" />
+//       <circle cx="50" cy="50" r="10" fill="#39FF14" opacity="0.9" />
+//       <circle cx="50" cy="50" r="5" fill="#050805" />
+//     </svg>
+//   );
+// }
 
 function OmnitrixIcon({ size = 36 }) {
   return (
     <div style={{ position: "relative", width: size, height: size, display: "flex", alignItems: "center", justifyContent: "center" }}>
       {/* Outer rotating conic ring */}
-      <div style={{
-        position: "absolute",
-        inset: -4,
-        borderRadius: "50%",
-        background: "conic-gradient(from 0deg, #39FF14, transparent 40%, #39FF14 60%, transparent 80%, #39FF14)",
-        animation: "omniSpin 3s linear infinite",
-        opacity: 0.85,
-        clipPath: "circle(50%)",
-      }} />
-      {/* Pulse glow ring */}
-      <div style={{
-        position: "absolute",
-        inset: -2,
-        borderRadius: "50%",
-        boxShadow: "0 0 8px 2px rgba(57,255,20,0.4), 0 0 16px 4px rgba(57,255,20,0.15)",
-        animation: "omniPulse 2s ease-in-out infinite",
-        clipPath: "circle(50%)",
-      }} />
-      {/* Mask to clip the conic gradient into a ring */}
-      <div style={{
-        position: "absolute",
-        inset: -4,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, transparent 42%, rgba(5,8,5,1) 43%, rgba(5,8,5,1) 48%, transparent 49%)",
-        pointerEvents: "none",
-        clipPath: "circle(50%)",
-      }} />
-      {/* PNG image */}
-      <img
-        src="/images/omnitrix/omnitrix-logo.png"
-        alt="Omnitrix"
+      <div
         style={{
-          width: size,
-          height: size,
-          objectFit: "cover",
+          position: "absolute",
+          inset: -4,
           borderRadius: "50%",
-          position: "relative",
-          zIndex: 1,
-          clipPath: "circle(50%)",
+          background: "conic-gradient(from 0deg, #39FF14, transparent 40%, #39FF14 60%, transparent 80%, #39FF14)",
+          animation: "omniSpin 3s linear infinite",
+          opacity: 0.85,
         }}
       />
+      {/* Pulse glow ring */}
+      <div
+        style={{
+          position: "absolute",
+          inset: -2,
+          borderRadius: "100%",
+          boxShadow: "0 0 8px 2px rgba(57,255,20,0.4), 0 0 16px 4px rgba(57,255,20,0.15)",
+          animation: "omniPulse 2s ease-in-out infinite",
+        }}
+      />
+      {/* Mask to clip the conic gradient into a ring */}
+      <div
+        style={{
+          position: "absolute",
+          inset: -4,
+          borderRadius: "100%",
+          background: "radial-gradient(circle, transparent 42%, rgba(5,8,5,1) 43%, rgba(5,8,5,1) 48%, transparent 49%)",
+          pointerEvents: "none",
+        }}
+      />
+      {/* PNG image */}
+      <img src="/images/omnitrix/omnitrix-logo.png" alt="Omnitrix" style={{ width: size, height: size, objectFit: "contain", borderRadius: "50%", position: "relative", zIndex: 1 }} />
       <style>{`
         @keyframes omniSpin  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes omniPulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
@@ -84,6 +87,7 @@ export default function Navbar() {
   const handleNavClick = (e, href) => {
     e.preventDefault();
     setOpen(false);
+
     if (isHome) {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -95,9 +99,11 @@ export default function Navbar() {
   useEffect(() => {
     if (isHome && location.state?.scrollTo) {
       const hash = location.state.scrollTo;
+
       setTimeout(() => {
         const el = document.querySelector(hash);
         if (el) el.scrollIntoView({ behavior: "smooth" });
+
         navigate(location.pathname, { replace: true, state: {} });
       }, 300);
     }
@@ -113,7 +119,9 @@ export default function Navbar() {
       >
         <nav className={cn("flex items-center justify-between", scrolled ? "px-6" : "")}>
           <Link to="/" className="flex items-center gap-3 group">
-            <OmnitrixIcon size={32} />
+            <div className="animate-omnitrix-pulse">
+              <OmnitrixIcon size={32} />
+            </div>
             <div>
               <span className="font-display text-sm text-[var(--green)] tracking-[4px] uppercase">BEN 10</span>
               <span className="block font-mono text-[8px] text-[var(--text-muted)] tracking-[3px] uppercase">Omnitrix Database</span>
@@ -135,18 +143,9 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setDark((d) => !d)}
-              className="w-8 h-8 glass flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--green)] transition-colors"
-            >
+            <button onClick={() => setDark((d) => !d)} className="w-8 h-8 glass flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--green)] transition-colors">
               <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={dark ? "d" : "l"}
-                  initial={{ scale: 0, rotate: -90 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  exit={{ scale: 0, rotate: 90 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.span key={dark ? "d" : "l"} initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, rotate: 90 }} transition={{ duration: 0.2 }}>
                   {dark ? <BsSun size={14} /> : <BsMoon size={14} />}
                 </motion.span>
               </AnimatePresence>
@@ -159,10 +158,7 @@ export default function Navbar() {
               ME
             </Link>
 
-            <button
-              onClick={() => setOpen((o) => !o)}
-              className="md:hidden w-9 h-9 glass flex items-center justify-center text-[var(--green)]"
-            >
+            <button onClick={() => setOpen((o) => !o)} className="md:hidden w-9 h-9 glass flex items-center justify-center text-[var(--green)]">
               {open ? <HiX size={18} /> : <HiMenuAlt3 size={18} />}
             </button>
           </div>
@@ -180,15 +176,12 @@ export default function Navbar() {
           >
             {LINKS.map((l, i) => (
               <motion.div key={l.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
-                <Link
-                  to="/"
-                  onClick={(e) => handleNavClick(e, l.href)}
-                  className="text-5xl font-display text-[var(--text)] py-4 hover:text-[var(--green)] transition-colors block"
-                >
+                <Link to="/" onClick={(e) => handleNavClick(e, l.href)} className="text-5xl font-display text-[var(--text)] py-4 hover:text-[var(--green)] transition-colors block">
                   {l.label}
                 </Link>
               </motion.div>
             ))}
+
             <Link to="/about" onClick={() => setOpen(false)} className="text-3xl font-display text-[var(--green)] py-4 block mt-2">
               ABOUT ME
             </Link>

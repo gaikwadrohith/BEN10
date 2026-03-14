@@ -702,7 +702,7 @@ export const STATS = [
   { label: "Projects", value: "20+" },
   { label: "Experience", value: "5yr" },
   { label: "Clients", value: "12+" },
-  { label: "Coffee/day", value: "∞" },
+  { label: "Coffee/day", value: "ＩＮFＩＮＩＴΞ" },
 ];
 
 export const SERVICES = [
